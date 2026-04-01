@@ -1,38 +1,28 @@
-// server.js
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { Pool } from "pg";
+import authRoutes from "./routes/authRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
+import complaintRoutes from "./routes/complaintRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+import staffRoutes from "./routes/staffRoutes.js";
+
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
-
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// PostgreSQL pool
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-});
 
-// Test database connection
-pool.connect()
-  .then(() => console.log("Connected to PostgreSQL"))
-  .catch((err) => console.error("DB connection error:", err));
+app.use("/api/auth", authRoutes);
+app.use("/uploads", express.static("uploads"));
+app.use("/api/services", serviceRoutes);
+app.use("/api/complaints", complaintRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/staff", staffRoutes);
 
-// Simple test route
-app.get("/", (req, res) => {
-  res.send("Backend is running!");
-});
-
-// Start server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
