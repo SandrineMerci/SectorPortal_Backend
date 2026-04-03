@@ -7,13 +7,11 @@ import complaintRoutes from "./routes/complaintRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import staffRoutes from "./routes/staffRoutes.js";
 
-
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
 
 app.use("/api/auth", authRoutes);
 app.use("/uploads", express.static("uploads"));

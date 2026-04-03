@@ -61,14 +61,13 @@ router.post("/", verifyToken, upload.array("attachments", 5), async (req, res) =
     res.status(500).json({ message: "Submission failed" });
   }
 });
-
 // GET SERVICE BY REFERENCE NUMBER
 router.get("/:referenceNumber", async (req, res) => {
   const { referenceNumber } = req.params;
 
   try {
     const result = await pool.query(
-      "",
+      "SELECT * FROM service_requests WHERE reference_number = $1",
       [referenceNumber]
     );
 
@@ -84,10 +83,6 @@ router.get("/:referenceNumber", async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Error fetching request" });
   }
-});
-
-router.get("/", (req, res) => {
-  res.json({ services: ["Service1", "Service2"] });
 });
 
 export default router;
